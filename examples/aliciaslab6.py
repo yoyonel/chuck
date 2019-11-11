@@ -1,11 +1,12 @@
-#Name: Alicia Steinmetz
-#File: music.py
-#Purpose: To use the doTogether function to create music for three instruments.
+# Name: Alicia Steinmetz
+# File: music.py
+# Purpose: To use the doTogether function to create music for three instruments.
 # This is my own creation....
 
 from chuck import *
 
 init()
+
 
 def base():
     bar = StruckBar()
@@ -18,6 +19,7 @@ def base():
         bar.setFrequency(659)
         bar.strike(1.0)
         wait(1.0)
+
 
 def bells():
     s = Shakers()
@@ -56,6 +58,6 @@ def melo():
         m.setFrequency(330)
         m.noteOn(.5)
         wait(.25)
-        
+
 
 doTogether(bells, base, melo)

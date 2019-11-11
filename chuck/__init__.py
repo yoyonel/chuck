@@ -21,12 +21,12 @@ from __future__ import division, print_function
 
 __version__ = "0.0.1"
 
-from . import osc 
-import os
+from . import osc
 import time
 import random
 import threading
 import traceback
+
 
 # ChucK unit generator documentation at
 # http://chuck.cs.princeton.edu/doc/program/ugen_full.html
@@ -36,16 +36,17 @@ import traceback
 def init():
     # init osc
     osc.init()
-    #directory, filename = os.path.split(__file__)
-    #chuck_ck = os.path.abspath(
+    # directory, filename = os.path.split(__file__)
+    # chuck_ck = os.path.abspath(
     #    os.path.join(directory, "osc", "oscrecv.ck"))
     # start chuck
-    #if os.name in ['nt', 'dos', 'os2']:
+    # if os.name in ['nt', 'dos', 'os2']:
     #    os.system("start chuck --port:9000 \"%s\" " % chuck_ck)
-    #elif os.name in ['posix']:
+    # elif os.name in ['posix']:
     #    os.system("/home/dblank/chuck/chuck-1.3.5.2/src/chuck --port:9000 \"%s\" &" % chuck_ck)
-    #else:
+    # else:
     #    raise AttributeError("your operating system (%s) is not currently supported" % os.name)
+
 
 # base instrument class (not to be instantiated)
 class Instrument:
@@ -53,15 +54,15 @@ class Instrument:
 
     # connect to output
     def connect(self):
-        osc.sendMsg("/inst/" + self.name + "/connect", ["dac",1])
+        osc.sendMsg("/inst/" + self.name + "/connect", ["dac", 1])
 
     # disconnect from output
     def disconnect(self):
-        osc.sendMsg("/inst/" + self.name + "/connect", ["dac",0])
-        
+        osc.sendMsg("/inst/" + self.name + "/connect", ["dac", 0])
+
     # change gain [0.0-1.0]
     def setGain(self, gain):
-        if gain >= 0: # and gain <= 1:
+        if gain >= 0:  # and gain <= 1:
             osc.sendMsg("/inst/" + self.name + "/gain", [gain * 1.0])
 
     # change frequency
@@ -103,7 +104,7 @@ class Mandolin(Instrument):
         self.name = "mandolin"
         osc.sendMsg("/init", [self.name])
         time.sleep(0.5)
-    
+
     # pluck the mandolin [0.0-1.0]
     def pluck(self, strength):
         if strength >= 0 and strength <= 1:
@@ -145,14 +146,14 @@ class Voice(Instrument):
         time.sleep(0.5)
 
     # select phoneme via one of these strings
-    #"eee"  "ihh"  "ehh"  "aaa" 
-    #"ahh"  "aww"  "ohh"  "uhh" 
-    #"uuu"  "ooo"  "rrr"  "lll" 
-    #"mmm"  "nnn"  "nng"  "ngg" 
-    #"fff"  "sss"  "thh"  "shh" 
-    #"xxx"  "hee"  "hoo"  "hah" 
-    #"bbb"  "ddd"  "jjj"  "ggg" 
-    #"vvv"  "zzz"  "thz"  "zhh"
+    # "eee"  "ihh"  "ehh"  "aaa"
+    # "ahh"  "aww"  "ohh"  "uhh"
+    # "uuu"  "ooo"  "rrr"  "lll"
+    # "mmm"  "nnn"  "nng"  "ngg"
+    # "fff"  "sss"  "thh"  "shh"
+    # "xxx"  "hee"  "hoo"  "hah"
+    # "bbb"  "ddd"  "jjj"  "ggg"
+    # "vvv"  "zzz"  "thz"  "zhh"
     def setPhoneme(self, phoneme):
         osc.sendMsg("/inst/voicform/phoneme", [phoneme])
 
@@ -187,7 +188,7 @@ class Voice(Instrument):
     def setVoiceMix(self, mix):
         if mix >= 0 and mix <= 1:
             osc.sendMsg("/inst/voicform/voiceMix", [mix * 1.0])
-        
+
     # pitch sweep [0.0-1.0]
     def setPitchSweepRate(self, rate):
         if rate >= 0 and rate <= 1:
@@ -252,7 +253,7 @@ class Sitar(Instrument):
     def pluck(self, strength):
         if strength >= 0 and strength <= 1:
             osc.sendMsg("/inst/sitar/pluck", [strength * 1.0])
-    
+
 
 # Shakers (collisions of multiple independent sound-producing objects)
 class Shakers(Instrument):
@@ -458,7 +459,7 @@ class StruckBar(Instrument):
     def setMode(self, mode, ratio, radius, gain):
         if mode >= 0 and mode <= 1 and radius >= 0 and radius <= 1 and gain >= 0 and gain <= 1:
             osc.sendMsg("/inst/modalbar/mode", [int(mode), ratio * 1.0,
-                                            radius * 1.0, gain * 1.0])
+                                                radius * 1.0, gain * 1.0])
 
 
 # Blown bottle (BlowBotl)
@@ -474,8 +475,8 @@ class BlowBottle(Instrument):
     def setVibrato(self, vibratoFreq, vibratoGain, noiseGain):
         if vibratoGain >= 0 and vibratoGain <= 1 and noiseGain >= 0 and noiseGain <= 1:
             osc.sendMsg("/inst/blowbotl/vibrato", [vibratoFreq * 1.0,
-                                               vibratoGain * 1.0,
-                                               noiseGain * 1.0])
+                                                   vibratoGain * 1.0,
+                                                   noiseGain * 1.0])
 
     # set volume [0.0-1.0]
     def setVolume(self, volume):
@@ -615,7 +616,8 @@ class FileRead(Instrument):
     def setLoopRate(self, loopsPerSecond):
         if loopsPerSecond > 0:
             osc.sendMsg("/inst/sndbuf/loopRate", [loopsPerSecond * 1.0])
-            
+
+
 # The end, for now
 
 def timer(seconds=0):
@@ -627,7 +629,10 @@ def timer(seconds=0):
             raise StopIteration()
         yield round(timepast, 3)
 
+
 _timers = {}
+
+
 def timeRemaining(seconds=0):
     """ Function to be used with 'while' """
     global _timers
@@ -650,17 +655,20 @@ def timeRemaining(seconds=0):
     else:
         return True
 
+
 def wait(seconds):
     """
     Wrapper for time.sleep() so that we may later overload.
     """
     return time.sleep(seconds)
 
+
 def now():
     """
     Returns current time in seconds since 
     """
     return time.time()
+
 
 def pickone(*args):
     """
@@ -671,14 +679,19 @@ def pickone(*args):
     else:
         return args[random.randrange(len(args))]
 
+
 def pickone_range(start, stop):
     """
     Randomly pick one of a list, or one between [0, arg).
     """
     return random.randrange(start, stop)
 
+
 def heads(): return flipCoin() == "heads"
+
+
 def tails(): return flipCoin() == "tails"
+
 
 def flipCoin():
     """
@@ -686,17 +699,20 @@ def flipCoin():
     """
     return ("heads", "tails")[random.randrange(2)]
 
+
 def randomNumber():
     """
     Returns a number between 0 (inclusive) and 1 (exclusive).
     """
     return random.random()
 
+
 class BackgroundThread(threading.Thread):
     """
     A thread class for running things in the background.
     """
-    def __init__(self, function, pause = 0.01):
+
+    def __init__(self, function, pause=0.01):
         """
         Constructor, setting initial variables
         """
@@ -704,7 +720,7 @@ class BackgroundThread(threading.Thread):
         self._stopevent = threading.Event()
         self._sleepperiod = pause
         threading.Thread.__init__(self, name="MyroThread")
-        
+
     def run(self):
         """
         overload of threading.thread.run()
@@ -712,14 +728,15 @@ class BackgroundThread(threading.Thread):
         """
         while not self._stopevent.isSet():
             self.function()
-            #self._stopevent.wait(self._sleepperiod)
+            # self._stopevent.wait(self._sleepperiod)
 
-    def join(self,timeout=None):
+    def join(self, timeout=None):
         """
         Stop the thread
         """
         self._stopevent.set()
         threading.Thread.join(self, timeout)
+
 
 def loop(*functions):
     """
@@ -729,13 +746,13 @@ def loop(*functions):
     >>> loop(f1, f2, 10)
     will call f1() then f2(), 10 times.
     """
-    assert len(functions) > 1,"loop: takes 1 (or more) functions and an integer"
+    assert len(functions) > 1, "loop: takes 1 (or more) functions and an integer"
     assert type(functions[-1]) == int, "loop: last parameter must be an integer"
     count = functions[-1]
     for i in range(count):
         for function in functions[:-1]:
-            print("   loop #%d: running %s()... " % (i + 1, function.__name__), 
-end="")
+            print("   loop #%d: running %s()... " % (i + 1, function.__name__),
+                  end="")
             try:
                 retval = function()
             except TypeError:
@@ -747,6 +764,7 @@ end="")
     stop()
     return "ok"
 
+
 def doTogether(*functions):
     """
     Runs each of the given functions at the same time.
@@ -756,15 +774,18 @@ def doTogether(*functions):
     will call f1() f2() and f3() together.
     """
     thread_results = [None] * len(functions)
+
     def makeThread(function, position):
         def newfunction():
             result = function()
             thread_results[position] = result
             return result
+
         import threading
         thread = threading.Thread()
         thread.run = newfunction
         return thread
+
     assert len(functions) >= 2, "doTogether: takes 2 (or more) functions"
     thread_list = []
     # first make the threads:
@@ -780,5 +801,3 @@ def doTogether(*functions):
         print('ok')
     else:
         return thread_results
-
-

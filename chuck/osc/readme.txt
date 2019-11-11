@@ -22,8 +22,8 @@ without the help of Daniel Holth and the support of Buchsenhausen, Innsbruck, Au
 How to use:
 Check the appTemplate.py example to see how to use it. You can place the osc folder next to your module
 or you can also copy it into the python site-packages folder (if you know where this lives in your system).
-Note that firewalls and routers tend to block nerwork ports for security. Make
-sure you use ports that are open for the OSC comunication.
+Note that firewalls and routers tend to block network ports for security. Make
+sure you use ports that are open for the OSC communication.
 
 
 Download page:

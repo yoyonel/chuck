@@ -1,6 +1,7 @@
 ## Chuck Interface
 
-NOTE: Before you can write programs in chuck, you need to have a chuck server running. See https://github.com/Calysto/chuck/blob/master/README.md
+NOTE: Before you can write programs in chuck, you need to have a chuck server running.
+See https://github.com/Calysto/chuck/blob/master/README.md
 
 Import the ChucK modules:
 
